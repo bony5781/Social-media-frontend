@@ -76,6 +76,7 @@ function Sidebar({ user }) {
         <button className="sidebarButton">Show More</button>
         <hr className='sidebarHr' />
         <ul className="sidebarFriendList">
+          <h6>Your Friends </h6>
           {friends.map((u) => (
             <CloseFriend key={u._id} user={u} />
           ))}

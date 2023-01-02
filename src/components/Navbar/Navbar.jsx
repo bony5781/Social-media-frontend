@@ -14,8 +14,6 @@ function Navbar() {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const navigate = useNavigate();
 
-  console.log(user.profilePicture);
-
   const handleClick = () => {
     logoutCall(
       dispatch
@@ -25,7 +23,7 @@ function Navbar() {
   return (
     <div className="navbarContainer">
       <div className="navbarLeft">
-        <span className="logo">Abhisocial</span>
+        <span className="logo" onClick={() => navigate("/")}>Abhisocial</span>
       </div>
       <div className="navbarCenter">
         <div className="searchbar">
@@ -55,7 +53,7 @@ function Navbar() {
         <Link to={`/profile/${user.username}`}>
           <img src={user.profilePicture ? user.profilePicture : PF + "person/noAvatar.png"} alt="" className="navbarImg" />
         </Link>
-        <Link to={`/`} style={{textDecoration: "none"}}>
+        <Link to={`/`} style={{ textDecoration: "none" }}>
           <span className="navbarLink" onClick={handleClick}>Sign out</span>
         </Link>
       </div>

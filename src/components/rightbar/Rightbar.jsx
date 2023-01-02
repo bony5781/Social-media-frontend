@@ -13,11 +13,12 @@ function Rightbar({ user }) {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [friends, setFriends] = useState([]);
   const { user: currentUser, dispatch } = useContext(AuthContext);
-  const [followed, setFollowed] = useState(
-    currentUser.following.includes(user ? user._id : null)
-  );
+  const [followed, setFollowed] = useState(false);
   const [allUsers, setAllUsers] = useState([]);
 
+  useEffect(()=> {
+    setFollowed(currentUser.following.includes(user ? user._id : null));
+  })
 
   useEffect(() => {
     const getFriends = async () => {
@@ -48,10 +49,8 @@ function Rightbar({ user }) {
 
   const handleClick = async () => {
     console.log(followed);
-    console.log(user._id);
     try {
       if (followed) {
-        console.log("1");
         await axiosInstance.put(`/users/${user._id}/unfollow`, {
           userId: currentUser._id,
         });
@@ -68,6 +67,14 @@ function Rightbar({ user }) {
       console.log(err);
     }
   };
+
+  allUsers.map((u) => {
+    friends.map((v) => {
+      if (u._id === v._id) {
+        allUsers.pop(u);
+      }
+    })
+  })
 
   const HomeRightbar = () => {
     return (
