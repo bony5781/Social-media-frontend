@@ -36,7 +36,7 @@ const AuthReducer = (state, action) => {
             };
         case "LOGOUT":
             return {
-                user: null,
+                user: localStorage.clear(),
                 isFetching: false,
                 error: false
             };
