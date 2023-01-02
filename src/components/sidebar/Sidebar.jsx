@@ -1,5 +1,5 @@
 import './sidebar.css'
-import { Users } from '../../dummyData'
+import { axiosInstance } from '../../config';
 import CloseFriend from '../closeFriend/CloseFriend';
 import RssFeedIcon from '@mui/icons-material/RssFeed';
 import ChatIcon from '@mui/icons-material/Chat';
@@ -10,8 +10,28 @@ import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
 import EventIcon from '@mui/icons-material/Event';
 import SchoolIcon from '@mui/icons-material/School';
+import { AuthContext } from '../../Context/AuthContext';
+import { useState } from 'react';
+import { useContext, useEffect } from 'react';
 
-function Sidebar() {
+function Sidebar({ user }) {
+
+  const [friends, setFriends] = useState([]);
+  const { user: currentUser} = useContext(AuthContext);
+
+  useEffect(() => {
+    const getFriends = async () => {
+      try {
+        const friendList = await axiosInstance.get("/users/friends/" + currentUser._id);
+        setFriends(friendList.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getFriends();
+  }, [user, currentUser._id])
+
+
   return (
     <div className='sidebar'>
       <div className="sidebarWrapper">
@@ -56,8 +76,8 @@ function Sidebar() {
         <button className="sidebarButton">Show More</button>
         <hr className='sidebarHr' />
         <ul className="sidebarFriendList">
-          {Users.map((u) => (
-            <CloseFriend key={u.id} user={u} />
+          {friends.map((u) => (
+            <CloseFriend key={u._id} user={u} />
           ))}
         </ul>
       </div>
