@@ -5,8 +5,8 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import { useContext, useRef, useState } from 'react';
 import { AuthContext } from "../../Context/AuthContext";
-import axios from 'axios';
 import CancelIcon from '@mui/icons-material/Cancel';
+import { axiosInstance } from '../../config';
 
 function Share() {
 
@@ -29,13 +29,13 @@ function Share() {
             newPost.img = fileName;
             console.log(newPost);
             try {
-                await axios.post("/upload", data);
+                await axiosInstance.post("/upload", data);
             } catch (err) {
                 console.log(err);
             }
         }
         try {
-            await axios.post("./posts", newPost);
+            await axiosInstance.post("./posts", newPost);
             window.location.reload();
         } catch (err) {
             console.log(err);

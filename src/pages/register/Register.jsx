@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { axiosInstance } from '../../config';
 import { useRef } from 'react';
 import './register.css';
 import { useNavigate } from "react-router";
@@ -32,7 +32,7 @@ function Register() {
                 coverPicture: coverPicture.current.value,
             }
             try {
-                await axios.post("/auth/register", user);
+                await axiosInstance.post("/auth/register", user);
                 navigate("/login");
             } catch (err) {
                 console.log(err);
