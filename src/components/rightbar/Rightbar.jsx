@@ -1,7 +1,7 @@
 import './rightbar.css'
 import Online from '../online/Online';
 import { useContext, useEffect } from 'react';
-import axiosInstance from '../../config.js';
+import { axiosInstance } from '../../config';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../Context/AuthContext';
@@ -14,7 +14,7 @@ function Rightbar({ user }) {
   const [friends, setFriends] = useState([]);
   const { user: currentUser, dispatch } = useContext(AuthContext);
   const [followed, setFollowed] = useState(
-    currentUser.following.includes(user?user._id:null)
+    currentUser.following.includes(user ? user._id : null)
   );
   const [allUsers, setAllUsers] = useState([]);
 
@@ -29,7 +29,7 @@ function Rightbar({ user }) {
       }
     };
     getFriends();
-}, [user,currentUser._id])
+  }, [user, currentUser._id])
 
   useEffect(() => {
     const getAllUsers = async () => {

@@ -1,7 +1,7 @@
 import './post.css'
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useEffect, useState } from 'react';
-import axiosInstance from '../../config.js';
+import { axiosInstance } from '../../config';
 import { format } from "timeago.js"
 import { Link } from 'react-router-dom'
 import { useContext } from 'react';
