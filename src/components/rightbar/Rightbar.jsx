@@ -16,7 +16,7 @@ function Rightbar({ user }) {
   const [followed, setFollowed] = useState(false);
   const [allUsers, setAllUsers] = useState([]);
 
-  useEffect(()=> {
+  useEffect(() => {
     setFollowed(currentUser.following.includes(user ? user._id : null));
   })
 
@@ -34,18 +34,28 @@ function Rightbar({ user }) {
 
   useEffect(() => {
     const getAllUsers = async () => {
+      let flag = 0;
       try {
         const all = await axiosInstance.get("/users/allUsers/" + currentUser.username);
         all.data.map((info) => {
-          setAllUsers(all.data);
-          return all;
+          friends.map((v) => {
+            if (v.username === info.username) {
+              flag = 1;
+              let idx = allUsers.indexOf(info);
+              setAllUsers(allUsers.splice(idx,1));
+            }
+          })
+          if (flag === 0) {
+            setAllUsers(all.data);
+            return all;
+          }
         });
       } catch (err) {
         console.log(err);
       }
     };
     getAllUsers();
-  }, [currentUser.username])
+  }, [currentUser.username, friends ])
 
   const handleClick = async () => {
     console.log(followed);
@@ -67,14 +77,6 @@ function Rightbar({ user }) {
       console.log(err);
     }
   };
-
-  allUsers.map((u) => {
-    friends.map((v) => {
-      if (u._id === v._id) {
-        allUsers.pop(u);
-      }
-    })
-  })
 
   const HomeRightbar = () => {
     return (

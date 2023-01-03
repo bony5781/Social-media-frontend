@@ -55,13 +55,13 @@ function Register() {
                         <input type="email" required ref={email} className='registerInput' placeholder='Email' />
                         <input type="text" required ref={city} className='registerInput' placeholder='City' />
                         <input type="text" required ref={from} className='registerInput' placeholder='Gender' />
-                        <input type="text" required ref={profilePicture} className='registerInput' placeholder='Link for profile picture' />
-                        <input type="text" required ref={coverPicture} className='registerInput' placeholder='Link for cover picture' />
+                        <input type="text" ref={profilePicture} className='registerInput' placeholder='Link for profile picture(Valid image format)' />
+                        <input type="text" ref={coverPicture} className='registerInput' placeholder='Link for cover picture(Valid image format)'  />
                         <input type="text" required ref={relationship} className='registerInput' placeholder='Relationship' />
                         <input type="password" minLength="6" required ref={password} className='registerInput' placeholder='Password' />
                         <input type="password" required ref={passwordAgain} className='registerInput' placeholder='Password Again' />
                         <button className='registerButton' type='submit' >Sign Up</button>
-                        <button className="registerRegisterButton" onClick={()=>navigate("/login")}>
+                        <button className="registerRegisterButton" onClick={() => navigate("/login")}>
                             Log into account
                         </button>
                     </form>
