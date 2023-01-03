@@ -6,8 +6,6 @@ import { AuthContext } from '../../Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 function Login() {
-
-    console.log(localStorage.getItem("user"));
     const email = useRef();
     const password = useRef();
     const { isFetching, dispatch } = useContext(AuthContext);

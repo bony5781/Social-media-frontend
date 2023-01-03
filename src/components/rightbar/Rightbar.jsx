@@ -18,7 +18,7 @@ function Rightbar({ user }) {
 
   useEffect(() => {
     setFollowed(currentUser.following.includes(user ? user._id : null));
-  })
+  },[user, currentUser.following])
 
   useEffect(() => {
     const getFriends = async () => {
@@ -34,31 +34,17 @@ function Rightbar({ user }) {
 
   useEffect(() => {
     const getAllUsers = async () => {
-      let flag = 0;
       try {
-        const all = await axiosInstance.get("/users/allUsers/" + currentUser.username);
-        all.data.map((info) => {
-          friends.map((v) => {
-            if (v.username === info.username) {
-              flag = 1;
-              let idx = allUsers.indexOf(info);
-              setAllUsers(allUsers.splice(idx,1));
-            }
-          })
-          if (flag === 0) {
-            setAllUsers(all.data);
-            return all;
-          }
-        });
+        const all = await axiosInstance.get("/users/allUsers/" + currentUser._id);
+        setAllUsers(all.data);
       } catch (err) {
         console.log(err);
       }
     };
     getAllUsers();
-  }, [currentUser.username, friends ])
+  }, [user, currentUser._id]);
 
   const handleClick = async () => {
-    console.log(followed);
     try {
       if (followed) {
         await axiosInstance.put(`/users/${user._id}/unfollow`, {
@@ -66,7 +52,6 @@ function Rightbar({ user }) {
         });
         dispatch({ type: "UNFOLLOW", payload: user._id });
       } else {
-        console.log("2");
         await axiosInstance.put(`/users/${user._id}/follow`, {
           userId: currentUser._id,
         });
