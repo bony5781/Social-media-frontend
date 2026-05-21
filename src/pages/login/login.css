@@ -71,6 +71,12 @@
     box-shadow: 0 0 0 4px rgba(23, 117, 238, 0.1);
 }
 
+.loginInput:disabled {
+    background-color: #f2f2f2;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
 .loginButton {
     height: 55px;
     border-radius: 12px;
@@ -80,7 +86,7 @@
     font-size: 18px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease-in-out;
 }
 
 .loginButton:hover {
@@ -91,6 +97,7 @@
 .loginButton:disabled {
     opacity: 0.7;
     cursor: not-allowed;
+    transform: none;
 }
 
 .loginForgot {
