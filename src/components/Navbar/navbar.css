@@ -1,5 +1,5 @@
 .navbarContainer {
-    height: 60px;
+    height: 65px;
     width: 100%;
     background-color: #1877f2;
     display: flex;
@@ -7,19 +7,19 @@
     position: sticky;
     top: 0;
     z-index: 999;
-    padding: 0 20px;
+    padding: 0 24px;
     box-sizing: border-box;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
 }
 
 .navbarLeft {
-    flex: 3;
+    flex: 2;
     display: flex;
     align-items: center;
 }
 
 .logo {
-    font-size: 32px;
+    font-size: 30px;
     font-weight: 800;
     color: white;
     cursor: pointer;
@@ -40,7 +40,7 @@
 .searchbar {
     width: 100%;
     max-width: 550px;
-    height: 40px;
+    height: 42px;
     background-color: white;
     border-radius: 30px;
     display: flex;
@@ -64,6 +64,7 @@
     width: 100%;
     font-size: 15px;
     background: transparent;
+    color: #1c1e21;
 }
 
 .searchInput:focus {
@@ -71,7 +72,7 @@
 }
 
 .navbarRight {
-    flex: 4;
+    flex: 3;
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -82,7 +83,7 @@
 .navbarLinks {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 16px;
 }
 
 .navbarLink {
@@ -97,45 +98,9 @@
     opacity: 0.85;
 }
 
-.navbarIcons {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.navbarIconItem {
-    cursor: pointer;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.2s ease;
-}
-
-.navbarIconItem:hover {
-    transform: translateY(-1px);
-}
-
-.navbarIconBadge {
-    width: 18px;
-    height: 18px;
-    background-color: #ff3040;
-    border-radius: 50%;
-    position: absolute;
-    top: -6px;
-    right: -6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-    font-weight: 600;
-    color: white;
-    border: 2px solid #1877f2;
-}
-
 .navbarImg {
-    height: 38px;
-    width: 38px;
+    height: 40px;
+    width: 40px;
     border-radius: 50%;
     object-fit: cover;
     cursor: pointer;
@@ -151,7 +116,7 @@
     border: none;
     background-color: rgba(255, 255, 255, 0.18);
     color: white;
-    padding: 8px 14px;
+    padding: 9px 14px;
     border-radius: 10px;
     cursor: pointer;
     font-weight: 600;
@@ -173,12 +138,12 @@
         display: none;
     }
 
-    .navbarRight {
-        gap: 12px;
+    .navbarContainer {
+        justify-content: space-between;
     }
 
-    .navbarLinks {
-        display: none;
+    .navbarRight {
+        gap: 12px;
     }
 }
 
@@ -186,19 +151,20 @@
 
     .navbarContainer {
         padding: 0 12px;
+        height: 60px;
     }
 
     .logo {
-        font-size: 26px;
+        font-size: 24px;
     }
 
-    .navbarIcons {
-        gap: 8px;
+    .navbarLinks {
+        display: none;
     }
 
     .navbarImg {
-        width: 34px;
-        height: 34px;
+        width: 36px;
+        height: 36px;
     }
 
     .logoutButton {
