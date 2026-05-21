@@ -49,14 +49,19 @@ function Login() {
 
     return (
         <div className='login'>
+
             <div className="loginWrapper">
 
                 <div className="loginLeft">
-                    <h3 className="loginLogo">AbhiSocial</h3>
+
+                    <h3 className="loginLogo">
+                        AbhiSocial
+                    </h3>
 
                     <span className="loginDesc">
                         Connect with your friends and the world around you on Abhisocial.
                     </span>
+
                 </div>
 
                 <div className="loginRight">
@@ -81,6 +86,7 @@ function Login() {
                             placeholder='Email'
                             ref={email}
                             required
+                            disabled={isFetching}
                         />
 
                         <input
@@ -90,6 +96,7 @@ function Login() {
                             ref={password}
                             minLength={6}
                             required
+                            disabled={isFetching}
                         />
 
                         <button
@@ -117,6 +124,7 @@ function Login() {
                 </div>
 
             </div>
+
         </div>
     )
 }
