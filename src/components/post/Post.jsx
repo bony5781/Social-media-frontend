@@ -114,7 +114,9 @@ function Post({ post }) {
 
                 profilePicture: currentUser.profilePicture,
 
-                text: commentText
+                text: commentText,
+
+                createdAt: new Date()
             };
 
             await axiosInstance.put(
@@ -122,11 +124,10 @@ function Post({ post }) {
                 newComment
             );
 
-            const updatedPost = await axiosInstance.get(
-                "/posts/" + post._id
-            );
-
-            setComments(updatedPost.data.comments || []);
+            setComments((prev) => [
+                ...prev,
+                newComment
+            ]);
 
             setCommentText("");
 
