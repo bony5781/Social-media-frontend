@@ -30,7 +30,7 @@ function Login() {
 
         try {
 
-            await loginCall(
+            const res = await loginCall(
                 {
                     email: email.current.value,
                     password: password.current.value
@@ -38,12 +38,25 @@ function Login() {
                 dispatch
             );
 
-            setMessage("Login successful!");
+            if (res) {
+                setMessage("Login successful!");
+            }
 
         } catch (err) {
 
-            setError("Invalid email or password");
+            if (
+                err.response?.status === 400 ||
+                err.response?.status === 401 ||
+                err.response?.status === 404
+            ) {
 
+                setError("Wrong email or password");
+
+            } else {
+
+                setError("Something went wrong");
+
+            }
         }
     }
 
