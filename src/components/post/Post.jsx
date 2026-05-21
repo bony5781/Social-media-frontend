@@ -126,7 +126,7 @@ function Post({ post }) {
                 "/posts/" + post._id
             );
 
-            setComments(updatedPost.data.comments);
+            setComments(updatedPost.data.comments || []);
 
             setCommentText("");
 
@@ -235,7 +235,7 @@ function Post({ post }) {
                     <div className="postBottomRight">
 
                         <span className="postCommentText">
-                            {comments.length} comments
+                            {comments?.length || 0} comments
                         </span>
 
                     </div>
@@ -274,7 +274,7 @@ function Post({ post }) {
 
                     <div className="commentsList">
 
-                        {comments.map((comment, index) => (
+                        {comments?.map((comment, index) => (
 
                             <div
                                 className="singleComment"
