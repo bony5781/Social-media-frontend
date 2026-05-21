@@ -1,243 +1,319 @@
-const router = require('express').Router();
+import './post.css'
 
-const Post = require('../models/Post');
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-const User = require('../models/User');
+import {
+    useEffect,
+    useState,
+    useContext
+} from 'react';
 
+import { axiosInstance } from '../../config';
 
-// Create a post
-router.post('/', async (req, res) => {
+import { format } from "timeago.js"
 
-    const newPost = new Post(req.body);
+import { Link } from 'react-router-dom'
 
-    try {
+import { AuthContext } from '../../Context/AuthContext';
 
-        const savedPost = await newPost.save();
+function Post({ post }) {
 
-        res.status(200).json(savedPost);
+    const [like, setLike] = useState(post.like.length);
 
-    } catch (err) {
+    const [isLiked, setIsLiked] = useState(false);
 
-        res.status(500).json({
-            message: "Failed to create post"
-        });
-    }
-});
+    const [user, setUser] = useState({});
 
+    const [comments, setComments] = useState(post.comments || []);
 
-// Update a post
-router.put('/:id', async (req, res) => {
+    const [commentText, setCommentText] = useState("");
 
-    try {
+    const [loadingComment, setLoadingComment] = useState(false);
 
-        const post = await Post.findById(req.params.id);
+    const [error, setError] = useState("");
 
-        if (post.userId === req.body.userId) {
+    const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
-            await post.updateOne({
-                $set: req.body
-            });
+    const { user: currentUser } = useContext(AuthContext);
 
-            res.status(200).json("Post updated");
+    useEffect(() => {
 
-        } else {
+        setIsLiked(post.like.includes(currentUser._id));
 
-            res.status(403).json("You can only update your own post");
-        }
+    }, [currentUser._id, post.like]);
 
-    } catch (err) {
+    useEffect(() => {
 
-        res.status(500).json({
-            message: "Failed to update post"
-        });
-    }
-});
+        const fetchUsers = async () => {
 
+            try {
 
-// Delete a post
-router.delete('/:id', async (req, res) => {
+                const res = await axiosInstance.get(
+                    `/users/?userId=${post.userId}`
+                );
 
-    try {
+                setUser(res.data);
 
-        const post = await Post.findById(req.params.id);
+            } catch (err) {
 
-        if (post.userId === req.body.userId) {
-
-            await post.deleteOne();
-
-            res.status(200).json("Post deleted");
-
-        } else {
-
-            res.status(403).json("You can only delete your own post");
-        }
-
-    } catch (err) {
-
-        res.status(500).json({
-            message: "Failed to delete post"
-        });
-    }
-});
-
-
-// Like / Dislike a post
-router.put('/:id/like', async (req, res) => {
-
-    try {
-
-        const post = await Post.findById(req.params.id);
-
-        if (!post.like.includes(req.body.userId)) {
-
-            await post.updateOne({
-                $push: { like: req.body.userId }
-            });
-
-            res.status(200).json("Post liked");
-
-        } else {
-
-            await post.updateOne({
-                $pull: { like: req.body.userId }
-            });
-
-            res.status(200).json("Post disliked");
-        }
-
-    } catch (err) {
-
-        res.status(500).json({
-            message: "Failed to like post"
-        });
-    }
-});
-
-
-// Add comment to post
-router.put('/:id/comment', async (req, res) => {
-
-    try {
-
-        const post = await Post.findById(req.params.id);
-
-        if (!post) {
-
-            return res.status(404).json({
-                message: "Post not found"
-            });
-        }
-
-        if (!req.body.text || req.body.text.trim() === "") {
-
-            return res.status(400).json({
-                message: "Comment cannot be empty"
-            });
-        }
-
-        const newComment = {
-
-            userId: req.body.userId,
-
-            username: req.body.username,
-
-            profilePicture: req.body.profilePicture || "",
-
-            text: req.body.text,
-
-            createdAt: new Date()
-        };
-
-        await post.updateOne({
-            $push: {
-                comments: newComment
+                console.log(err);
             }
-        });
+        }
 
-        res.status(200).json("Comment added successfully");
+        fetchUsers();
 
-    } catch (err) {
+    }, [post.userId]);
 
-        res.status(500).json({
-            message: "Failed to add comment"
-        });
+    const likeHandler = async () => {
+
+        try {
+
+            await axiosInstance.put(
+                "/posts/" + post._id + "/like",
+                {
+                    userId: currentUser._id
+                }
+            );
+
+            setLike(isLiked ? like - 1 : like + 1);
+
+            setIsLiked(!isLiked);
+
+        } catch (err) {
+
+            console.log(err);
+        }
     }
-});
 
+    const commentHandler = async () => {
 
-// Get single post
-router.get('/:id', async (req, res) => {
+        if (!commentText.trim()) {
 
-    try {
+            setError("Comment cannot be empty");
 
-        const post = await Post.findById(req.params.id);
+            return;
+        }
 
-        res.status(200).json(post);
+        try {
 
-    } catch (err) {
+            setLoadingComment(true);
 
-        res.status(500).json({
-            message: "Failed to fetch post"
-        });
+            setError("");
+
+            const newComment = {
+
+                userId: currentUser._id,
+
+                username: currentUser.username,
+
+                profilePicture: currentUser.profilePicture,
+
+                text: commentText
+            };
+
+            await axiosInstance.put(
+                "/posts/" + post._id + "/comment",
+                newComment
+            );
+
+            setComments([
+                ...comments,
+                {
+                    ...newComment,
+                    createdAt: new Date()
+                }
+            ]);
+
+            setCommentText("");
+
+        } catch (err) {
+
+            console.log(err);
+
+            setError("Failed to add comment");
+
+        } finally {
+
+            setLoadingComment(false);
+        }
     }
-});
 
+    return (
 
-// Get timeline posts
-router.get('/timeline/:userId', async (req, res) => {
+        <div className="post">
 
-    try {
+            <div className="postWrapper">
 
-        const currUser = await User.findById(req.params.userId);
+                <div className="postTop">
 
-        const userPosts = await Post.find({
-            userId: currUser._id
-        });
+                    <div className="postTopLeft">
 
-        const friendPosts = await Promise.all(
+                        <Link to={`/profile/${user.username}`}>
 
-            currUser.following.map(friendId => {
+                            <img
+                                className="postProfileImg"
+                                src={
+                                    user.profilePicture
+                                        ? user.profilePicture
+                                        : PF + "person/noAvatar.png"
+                                }
+                                alt=""
+                            />
 
-                return Post.find({
-                    userId: friendId
-                });
-            })
-        );
+                        </Link>
 
-        res.status(200).json(
-            userPosts.concat(...friendPosts)
-        );
+                        <div className="postUserInfo">
 
-    } catch (err) {
+                            <span className="postUsername">
+                                {user.username}
+                            </span>
 
-        res.status(500).json({
-            message: "Failed to fetch timeline"
-        });
-    }
-});
+                            <span className="postDate">
+                                {format(post.createdAt)}
+                            </span>
 
+                        </div>
 
-// Get user's posts
-router.get('/profile/:username', async (req, res) => {
+                    </div>
 
-    try {
+                    <div className="postTopRight">
 
-        const user = await User.findOne({
-            username: req.params.username
-        });
+                        <MoreVertIcon className="postMenuIcon" />
 
-        const posts = await Post.find({
-            userId: user._id
-        });
+                    </div>
 
-        res.status(200).json(posts);
+                </div>
 
-    } catch (err) {
+                <div className="postCenter">
 
-        res.status(500).json({
-            message: "Failed to fetch profile posts"
-        });
-    }
-});
+                    {post?.desc && (
 
-module.exports = router;
+                        <span className="postText">
+                            {post.desc}
+                        </span>
+                    )}
+
+                    {post.img && (
+
+                        <img
+                            className="postImg"
+                            src={post.img}
+                            alt=""
+                        />
+                    )}
+
+                </div>
+
+                <div className="postBottom">
+
+                    <div className="postBottomLeft">
+
+                        <img
+                            className={`likeIcon ${isLiked ? "liked" : ""}`}
+                            src={`${PF}like.png`}
+                            onClick={likeHandler}
+                            alt=""
+                        />
+
+                        <img
+                            className={`likeIcon ${isLiked ? "liked" : ""}`}
+                            src={`${PF}heart.png`}
+                            onClick={likeHandler}
+                            alt=""
+                        />
+
+                        <span className="postLikeCounter">
+                            {like} people like this
+                        </span>
+
+                    </div>
+
+                    <div className="postBottomRight">
+
+                        <span className="postCommentText">
+                            {comments.length} comments
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div className="commentSection">
+
+                    {error && (
+                        <div className="error-msg">
+                            {error}
+                        </div>
+                    )}
+
+                    <div className="commentInputContainer">
+
+                        <input
+                            type="text"
+                            placeholder="Write a comment..."
+                            className="commentInput"
+                            value={commentText}
+                            onChange={(e) =>
+                                setCommentText(e.target.value)
+                            }
+                        />
+
+                        <button
+                            className="commentButton"
+                            onClick={commentHandler}
+                            disabled={loadingComment}
+                        >
+                            {loadingComment ? "Posting..." : "Post"}
+                        </button>
+
+                    </div>
+
+                    <div className="commentsList">
+
+                        {comments.map((comment, index) => (
+
+                            <div
+                                className="singleComment"
+                                key={index}
+                            >
+
+                                <img
+                                    src={
+                                        comment.profilePicture
+                                            ? comment.profilePicture
+                                            : PF + "person/noAvatar.png"
+                                    }
+                                    alt=""
+                                    className="commentProfileImg"
+                                />
+
+                                <div className="commentContent">
+
+                                    <span className="commentUsername">
+                                        {comment.username}
+                                    </span>
+
+                                    <span className="commentText">
+                                        {comment.text}
+                                    </span>
+
+                                    <span className="commentDate">
+                                        {format(comment.createdAt)}
+                                    </span>
+
+                                </div>
+
+                            </div>
+                        ))}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    )
+}
+
+export default Post
