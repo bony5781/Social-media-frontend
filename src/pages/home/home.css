@@ -16,7 +16,7 @@
 /* Mobile */
 @media screen and (max-width: 768px) {
 
-    .homeContainer {
-        flex-direction: column;
+    .sidebar {
+        display: none !important;
     }
 }
