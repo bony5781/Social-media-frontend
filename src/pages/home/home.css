@@ -1,4 +1,22 @@
-.homeContainer{
+.homeContainer {
     display: flex;
     width: 100%;
+    background-color: #f0f2f5;
+    min-height: calc(100vh - 65px);
+}
+
+/* Tablet */
+@media screen and (max-width: 1024px) {
+
+    .homeContainer {
+        gap: 0;
+    }
+}
+
+/* Mobile */
+@media screen and (max-width: 768px) {
+
+    .homeContainer {
+        flex-direction: column;
+    }
 }
