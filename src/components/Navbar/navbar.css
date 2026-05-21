@@ -1,5 +1,5 @@
-.navbarContainer{
-    height: 50px;
+.navbarContainer {
+    height: 60px;
     width: 100%;
     background-color: #1877f2;
     display: flex;
@@ -7,89 +7,202 @@
     position: sticky;
     top: 0;
     z-index: 999;
+    padding: 0 20px;
+    box-sizing: border-box;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
 }
 
-.navbarLeft{
+.navbarLeft {
     flex: 3;
+    display: flex;
+    align-items: center;
 }
 
-.logo{
-    font-size: 24px;
-    margin-left: 20px;
-    font-weight: bold;
+.logo {
+    font-size: 32px;
+    font-weight: 800;
     color: white;
     cursor: pointer;
+    letter-spacing: -1px;
+    transition: 0.2s;
 }
 
-.navbarCenter{
+.logo:hover {
+    opacity: 0.9;
+}
+
+.navbarCenter {
     flex: 5;
+    display: flex;
+    justify-content: center;
 }
 
-.searchbar{
+.searchbar {
     width: 100%;
-    height: 30px;
+    max-width: 550px;
+    height: 40px;
     background-color: white;
     border-radius: 30px;
     display: flex;
     align-items: center;
+    padding: 0 15px;
+    transition: all 0.2s ease;
 }
 
-.searchIcon{
-    font-size: 20px !important;
-    margin-left: 10px;
+.searchbar:focus-within {
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25);
 }
 
-.searchInput{
+.searchIcon {
+    font-size: 22px !important;
+    color: #65676b;
+    margin-right: 10px;
+}
+
+.searchInput {
     border: none;
-    width: 70%;
+    width: 100%;
+    font-size: 15px;
+    background: transparent;
 }
 
-.searchInput:focus{
+.searchInput:focus {
     outline: none;
 }
 
-.navbarRight{
+.navbarRight {
     flex: 4;
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: flex-end;
+    gap: 18px;
     color: white;
 }
 
-.navbarLink{
-    margin-right: 10px;
-    font-size: 14px;
+.navbarLinks {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.navbarLink {
+    font-size: 15px;
+    font-weight: 500;
     color: white;
     cursor: pointer;
+    transition: 0.2s;
 }
 
-.navbarIcons{
+.navbarLink:hover {
+    opacity: 0.85;
+}
+
+.navbarIcons {
     display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
-.navbarIconItem{
-    margin-right: 15px;
+.navbarIconItem {
     cursor: pointer;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
 }
 
-.navbarIconBadge{
-    width: 15px;
-    height: 15px;
-    background-color: red;
+.navbarIconItem:hover {
+    transform: translateY(-1px);
+}
+
+.navbarIconBadge {
+    width: 18px;
+    height: 18px;
+    background-color: #ff3040;
     border-radius: 50%;
     position: absolute;
-    top: -5px;
-    right: -5px;
+    top: -6px;
+    right: -6px;
     display: flex;
+    align-items: center;
     justify-content: center;
-    font-size: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    color: white;
+    border: 2px solid #1877f2;
 }
 
-.navbarImg{
-    height: 32px;
-    width: 32px;
+.navbarImg {
+    height: 38px;
+    width: 38px;
     border-radius: 50%;
     object-fit: cover;
     cursor: pointer;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    transition: 0.2s;
+}
+
+.navbarImg:hover {
+    transform: scale(1.05);
+}
+
+.logoutButton {
+    border: none;
+    background-color: rgba(255, 255, 255, 0.18);
+    color: white;
+    padding: 8px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.logoutButton:hover {
+    background-color: rgba(255, 255, 255, 0.28);
+}
+
+.logoutButton:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+@media screen and (max-width: 900px) {
+
+    .navbarCenter {
+        display: none;
+    }
+
+    .navbarRight {
+        gap: 12px;
+    }
+
+    .navbarLinks {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 600px) {
+
+    .navbarContainer {
+        padding: 0 12px;
+    }
+
+    .logo {
+        font-size: 26px;
+    }
+
+    .navbarIcons {
+        gap: 8px;
+    }
+
+    .navbarImg {
+        width: 34px;
+        height: 34px;
+    }
+
+    .logoutButton {
+        padding: 7px 10px;
+        font-size: 12px;
+    }
 }
