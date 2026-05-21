@@ -44,6 +44,12 @@ function Post({ post }) {
 
     useEffect(() => {
 
+        setComments(post.comments || []);
+
+    }, [post.comments]);
+
+    useEffect(() => {
+
         const fetchUsers = async () => {
 
             try {
@@ -116,13 +122,11 @@ function Post({ post }) {
                 newComment
             );
 
-            setComments([
-                ...comments,
-                {
-                    ...newComment,
-                    createdAt: new Date()
-                }
-            ]);
+            const updatedPost = await axiosInstance.get(
+                "/posts/" + post._id
+            );
+
+            setComments(updatedPost.data.comments);
 
             setCommentText("");
 
